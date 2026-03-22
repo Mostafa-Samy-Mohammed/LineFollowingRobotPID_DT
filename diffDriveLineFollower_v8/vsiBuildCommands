@@ -1,0 +1,59 @@
+add component -type Python -name simulator
+add port -componentName simulator -name simulator -gateway python2DtEthernet
+
+add component -type Python -name controller
+add port -componentName controller -name controller -gateway python2DtEthernet
+
+add component -type Python -name visualizer
+add port -componentName visualizer -name visualizer -gateway python2DtEthernet
+
+
+config port -componentName simulator -portName simulator -macAddress 12:34:56:78:9A:01 -ipAddress 192.168.1.1
+
+config port -componentName controller -portName controller -macAddress 12:34:56:78:9A:02 -ipAddress 192.168.1.2
+
+config port -componentName visualizer -portName visualizer -macAddress 12:34:56:78:9A:03 -ipAddress 192.168.1.3
+
+
+define componentSignals -componentName simulator -signals "[x:double:output,y:double:output,theta:double:output,ref_x:double:output,ref_y:double:output,vR_cmd:double:input,vL_cmd:double:input]"
+
+define componentSignals -componentName controller -signals "[x:double:input,y:double:input,theta:double:input,ref_x:double:input,ref_y:double:input,vR_cmd:double:output,vL_cmd:double:output]"
+
+define componentSignals -componentName visualizer -signals "[x:double:input,y:double:input,theta:double:input,ref_x:double:input,ref_y:double:input]"
+
+
+add portSocket -componentName simulator -portName simulator -ipPortNum 8070 -socketType server -protocol tcpIp
+add portSocket -componentName controller -portName controller -ipPortNum 8070 -socketType client -protocol tcpIp
+
+add portSocket -componentName simulator -portName simulator -ipPortNum 8071 -socketType server -protocol tcpIp
+add portSocket -componentName visualizer -portName visualizer -ipPortNum 8071 -socketType client -protocol tcpIp
+
+
+# Pose from simulator
+connect signals -sourceSignal simulator.x -destSignal controller.x -sourcePortName simulator -destPortName controller
+connect signals -sourceSignal simulator.y -destSignal controller.y -sourcePortName simulator -destPortName controller
+connect signals -sourceSignal simulator.theta -destSignal controller.theta -sourcePortName simulator -destPortName controller
+
+# Reference path
+connect signals -sourceSignal simulator.ref_x -destSignal controller.ref_x -sourcePortName simulator -destPortName controller
+connect signals -sourceSignal simulator.ref_y -destSignal controller.ref_y -sourcePortName simulator -destPortName controller
+
+# Commands back to simulator
+connect signals -sourceSignal controller.vR_cmd -destSignal simulator.vR_cmd -sourcePortName controller -destPortName simulator
+connect signals -sourceSignal controller.vL_cmd -destSignal simulator.vL_cmd -sourcePortName controller -destPortName simulator
+
+# Visualizer taps signals
+connect signals -sourceSignal simulator.x -destSignal visualizer.x -sourcePortName simulator -destPortName visualizer
+connect signals -sourceSignal simulator.y -destSignal visualizer.y -sourcePortName simulator -destPortName visualizer
+connect signals -sourceSignal simulator.theta -destSignal visualizer.theta -sourcePortName simulator -destPortName visualizer
+connect signals -sourceSignal simulator.ref_x -destSignal visualizer.ref_x -sourcePortName simulator -destPortName visualizer
+connect signals -sourceSignal simulator.ref_y -destSignal visualizer.ref_y -sourcePortName simulator -destPortName visualizer
+
+
+set digitalTwinName lineFollowerTwin
+set workspaceDir .
+
+set simulationStep 0.01 s
+set totalSimTime 100 s
+
+generate

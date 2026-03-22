@@ -1,0 +1,55 @@
+-N
+0 simulator 1
+vR_cmd double i 1
+vL_cmd double i 1
+x double o 2
+y double o 2
+theta double o 2
+ref_x double o 2
+ref_y double o 2
+-N
+1 controller 1
+vR_cmd double o 1
+vL_cmd double o 1
+x double i 1
+y double i 1
+theta double i 1
+ref_x double i 1
+ref_y double i 1
+-N
+2 visualizer 1
+x double i 1
+y double i 1
+theta double i 1
+ref_x double i 1
+ref_y double i 1
+-ETH
+0 12:34:56:78:9a:01
+1 12:34:56:78:9a:02
+2 12:34:56:78:9a:03
+-C
+i 0 vR_cmd 1 vR_cmd
+i 0 vL_cmd 1 vL_cmd
+o 0 x 1 x
+o 0 x 2 x
+o 0 y 1 y
+o 0 y 2 y
+o 0 theta 1 theta
+o 0 theta 2 theta
+o 0 ref_x 1 ref_x
+o 0 ref_x 2 ref_x
+o 0 ref_y 1 ref_y
+o 0 ref_y 2 ref_y
+o 1 vR_cmd 0 vR_cmd
+o 1 vL_cmd 0 vL_cmd
+i 1 x 0 x
+i 1 y 0 y
+i 1 theta 0 theta
+i 1 ref_x 0 ref_x
+i 1 ref_y 0 ref_y
+i 2 x 0 x
+i 2 y 0 y
+i 2 theta 0 theta
+i 2 ref_x 0 ref_x
+i 2 ref_y 0 ref_y
+-END
