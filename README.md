@@ -53,7 +53,8 @@ Simulation controls in the same Innexis VSI window:
 	exit
 	```
 
-##Demo
+## Demo
+
 Demo run of the S-curved path tracking with low-level applied noise disturbance (std dev. = 0.01 m) on the robot's real-time position feedback of the simulator:
 
 https://github.com/user-attachments/assets/22e1fbf4-66fd-4e8f-aaa5-12a6d123bd31
